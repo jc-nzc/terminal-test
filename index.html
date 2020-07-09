@@ -2,11 +2,58 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title></title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/keen-analysis@latest/dist/keen-analysis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@keen.io/dataviz@latest/dist/dataviz.min.js"></script>
+    <title>DataViz Chart</title>
   </head>
   <body>
-
-    <h1>Hello World</h1>
-
+    <div id="container" style="width: 600px; height: 500px"></div>
+    <script type="text/javascript">
+    const client = new KeenAnalysis({
+          projectId: '5c87b64ec9e77c0001cf5b6e',
+          readKey: 'd41156a2ed478d074f9898f1a6ab742a501a434ea64e7d46026e3d75af633f6e83b94d7c4580dc29280e6d44f68f1a7a04c9c7c074fd77ee84e2384cdb98d3b718b62f5509e87a738824719d2ad1e596e535bff6748cd7a74ec21ceaed87ccde',
+          });
+          const dataviz = new KeenDataviz({
+          type: 'area',
+          container: '#container',
+          widget: {
+          title: {
+          content: 'Purchases by Category',
+          },
+          subtitle: {
+          content: 'Daily Results',
+          },
+          },
+          settings: {
+          margins: {
+          top: 20,
+          left: 45,
+          right: 15,
+          bottom: 35
+          },
+          curve: 'linear',
+              groupMode: 'stacked',
+              stackMode: 'normal',
+              theme: {
+            axisY: {
+              tickPadding: 13,
+                },
+              },
+          },
+          });
+          client
+          .query({
+          analysis_type: 'count',
+          event_collection: 'mobile_purchases',
+          timeframe: {
+          start: '2019-03-20T00:00:00.000-00:00',
+          end: '2019-03-26T00:00:00.000-00:00',
+          },
+          group_by: ['product.name'],
+          interval: 'daily',
+          }).then((res) => {
+          dataviz.render(res);
+          });
+    </script>
   </body>
 </html>
